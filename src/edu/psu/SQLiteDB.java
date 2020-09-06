@@ -25,21 +25,21 @@ public class SQLiteDB {
     public static void createNewTable(String url) {
 
         String sql = "CREATE TABLE IF NOT EXISTS perm_city_polyclinic_7_registry (\n" +
-                "name_doctor VARCHAR(50),\n" +
-                "birth_date_doctor TEXT,\n" +
-                "sex_doctor CHARACTER(1),\n" +
-                "education_doctor VARCHAR(16),\n" +
-                "position VARCHAR(40),\n" +
-                "qualification_category CHARACTER(4),\n" +
-                "department VARCHAR(64),\n" +
-                "special_department VARCHAR(64),\n" +
-                "name_patient VARCHAR(50),\n" +
-                "birth_date_patient TEXT,\n" +
-                "sex_patient CHARACTER(1)\n" +
-                "card_number INTEGER,\n" +
-                "visit_datetime TEXT,\n" +
-                "visit_status INTEGER,\n" +
-                "visit_comment TEXT);";
+                "name_doctor VARCHAR(50) NOT NULL,\n" +
+                "birth_date_doctor TEXT NOT NULL,\n" +
+                "sex_doctor CHARACTER(1) NOT NULL,\n" +
+                "education_doctor VARCHAR(16) NOT NULL,\n" +
+                "position VARCHAR(40) NOT NULL,\n" +
+                "qualification_category CHARACTER(4) NOT NULL,\n" +
+                "department VARCHAR(64) NOT NULL,\n" +
+                "special_department VARCHAR(64) NOT NULL,\n" +
+                "name_patient VARCHAR(50) NOT NULL,\n" +
+                "birth_date_patient TEXT NOT NULL,\n" +
+                "sex_patient CHARACTER(1) NOT NULL\n" +
+                "card_number INTEGER, NOT NULL\n" +
+                "visit_datetime TEXT, NOT NULL\n" +
+                "visit_status INTEGER, NOT NULL\n" +
+                "visit_comment TEXT NULL);";
 
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
