@@ -19,17 +19,19 @@ public class SQLiteDB {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
                 System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new SQLite database has been created.");
+                System.out.println("A new SQLite database has been created");
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
     }
 
     public static void createNewTable(String url, String tableName) {
 
-        String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n" +
+        String sql = "DROP TABLE IF EXISTS " + tableName + ";\n" +
+                "CREATE TABLE IF NOT EXISTS " + tableName + " (\n" +
                 "name_doctor VARCHAR(50) NOT NULL,\n" +
                 "birth_date_doctor TEXT NOT NULL,\n" +
                 "sex_doctor CHARACTER(1) NOT NULL,\n" +
@@ -53,6 +55,7 @@ public class SQLiteDB {
             System.out.println("Table " + tableName + " created");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
     }
 
@@ -85,7 +88,6 @@ public class SQLiteDB {
             }
         } catch (IOException e) {
             System.out.println("File not found");
-            e.printStackTrace();
         }
 
         return arrayList;
@@ -125,7 +127,6 @@ public class SQLiteDB {
         }
 
         dataValues = formateData(registry);
-        // System.out.println(dataValues);
 
         return dataValues;
     }
@@ -142,6 +143,7 @@ public class SQLiteDB {
             stmt.execute(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
     }
 

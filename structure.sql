@@ -1,19 +1,23 @@
+DROP TABLE IF EXISTS qualification_categories;
 CREATE TABLE IF NOT EXISTS qualification_categories (
 	ID SERIAL PRIMARY KEY,
 	qualification_category CHAR(4) NOT NULL
 );
 
+DROP TABLE IF EXISTS departments;
 CREATE TABLE IF NOT EXISTS departments (
 	ID SERIAL PRIMARY KEY,
 	department VARCHAR(64) NOT NULL
 );
 
+DROP TABLE IF EXISTS special_departments;
 CREATE TABLE IF NOT EXISTS special_departments (
 	ID SERIAL PRIMARY KEY,
 	special_department VARCHAR(64) NOT NULL,
 	ID_department INTEGER NOT NULL REFERENCES departments (ID)
 );
 
+DROP TABLE IF EXISTS doctors;
 CREATE TABLE IF NOT EXISTS doctors (
 	ID SERIAL PRIMARY KEY,
 	last_name VARCHAR(16) NOT NULL,
@@ -27,6 +31,7 @@ CREATE TABLE IF NOT EXISTS doctors (
 	ID_special_department INTEGER NOT NULL REFERENCES special_departments (ID)
 );
 
+DROP TABLE IF EXISTS patients;
 CREATE TABLE IF NOT EXISTS patients (
 	card_number SERIAL PRIMARY KEY,
 	last_name VARCHAR(16) NOT NULL,
@@ -36,6 +41,7 @@ CREATE TABLE IF NOT EXISTS patients (
 	sex char(1) NOT NULL
 );
 
+DROP TABLE IF EXISTS visits;
 CREATE TABLE IF NOT EXISTS visits (
 	visit_datetime TIMESTAMP WITH TIME ZONE NOT NULL,
 	ID_doctor INTEGER NOT NULL REFERENCES doctors (ID),
