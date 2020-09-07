@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>edu.psu.db_import_export</groupId>
+    <artifactId>db_import_export</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.13.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>3.13.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>3.13.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.32.3.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>3.13.4</version>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jooq</groupId>
+                    <artifactId>jooq-codegen-maven</artifactId>
+                    <version>3.13.4</version>
+
+                    <executions>
+                        <execution>
+                            <id>GenerateSQLite</id>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                            <configuration>
+                                <jdbc>
+                                    <driver>org.sqlite.JDBC</driver>
+                                    <url>jdbc:sqlite:perm_city_polyclinic_7_registry.db</url>
+                                    <properties>
+<!--                                        <property>-->
+<!--                                            <key>charSet</key>-->
+<!--                                            <value>utf-8</value>-->
+<!--                                        </property>-->
+                                    </properties>
+                                </jdbc>
+
+                                <generator>
+                                    <database>
+                                        <name>org.jooq.meta.sqlite.SQLiteDatabase</name>
+                                        <includes>.*</includes>
+                                        <schemata>
+                                            <schema>
+                                                <inputSchema></inputSchema>
+                                            </schema>
+                                        </schemata>
+                                    </database>
+                                    <target>
+                                        <packageName>edu.psu.generateSQLite</packageName>
+                                        <directory>target/generated-sources/db</directory>
+                                    </target>
+
+                                    <generate>
+                                        <pojos>true</pojos>
+                                        <globalObjectReferences>true</globalObjectReferences>
+                                        <javaTimeTypes>true</javaTimeTypes>
+                                    </generate>
+                                </generator>
+                            </configuration>
+                        </execution>
+
+<!--                        <execution>-->
+<!--                            <id>GeneratePostgresQL</id>-->
+<!--                            <goals>-->
+<!--                                <goal>generate</goal>-->
+<!--                            </goals>-->
+<!--                            <configuration>-->
+<!--                                <jdbc>-->
+<!--                                    <driver>org.postgresql.Driver</driver>-->
+<!--                                    <url>${pg_url}</url>-->
+<!--                                    <username>${pg_username}</username>-->
+<!--                                    <password>${pg_password}</password>-->
+<!--                                    <properties>-->
+<!--                                        <property>-->
+<!--                                            <key>charSet</key>-->
+<!--                                            <value>utf-8</value>-->
+<!--                                        </property>-->
+<!--                                    </properties>-->
+<!--                                </jdbc>-->
+
+<!--                                <generator>-->
+<!--                                    <database>-->
+<!--                                        <name>org.jooq.meta.postgres.PostgresDatabase</name>-->
+<!--                                        <includes>.*</includes>-->
+<!--                                        <schemata>-->
+<!--                                            <schema>-->
+<!--                                                <inputSchema>psu-courses</inputSchema>-->
+<!--                                            </schema>-->
+<!--                                        </schemata>-->
+<!--                                    </database>-->
+<!--                                    <target>-->
+<!--                                        <packageName>ru.psu.martyshenko.trrp.lab0.pg</packageName>-->
+<!--                                        <directory>target/generated-sources/jooq</directory>-->
+<!--                                    </target>-->
+
+<!--                                    <generate>-->
+<!--                                        <pojos>true</pojos>-->
+<!--                                        <daos>true</daos>-->
+<!--                                        <sequences>true</sequences>-->
+<!--                                        <globalObjectReferences>true</globalObjectReferences>-->
+<!--                                        <javaTimeTypes>true</javaTimeTypes>-->
+<!--                                    </generate>-->
+<!--                                </generator>-->
+<!--                            </configuration>-->
+<!--                        </execution>-->
+                    </executions>
+
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.xerial</groupId>
+                            <artifactId>sqlite-jdbc</artifactId>
+                            <version>3.32.3.2</version>
+                        </dependency>
+
+<!--                        <dependency>-->
+<!--                            <groupId>net.java.dev.jna</groupId>-->
+<!--                            <artifactId>jna</artifactId>-->
+<!--                            <version>5.5.0</version>-->
+<!--                        </dependency>-->
+
+<!--                        <dependency>-->
+<!--                            <groupId>org.postgresql</groupId>-->
+<!--                            <artifactId>postgresql</artifactId>-->
+<!--                            <version>42.2.14</version>-->
+<!--                        </dependency>-->
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>8</source>
+                        <target>8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
