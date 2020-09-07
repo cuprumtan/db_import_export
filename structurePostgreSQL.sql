@@ -1,13 +1,13 @@
 DROP TABLE IF EXISTS qualification_categories;
 CREATE TABLE IF NOT EXISTS qualification_categories (
 	ID SERIAL PRIMARY KEY,
-	qualification_category CHAR(4) NOT NULL
+	qualification_category CHAR(4) NOT NULL UNIQUE
 );
 
 DROP TABLE IF EXISTS departments;
 CREATE TABLE IF NOT EXISTS departments (
 	ID SERIAL PRIMARY KEY,
-	department VARCHAR(64) NOT NULL
+	department VARCHAR(64) NOT NULL UNIQUE
 );
 
 DROP TABLE IF EXISTS special_departments;
