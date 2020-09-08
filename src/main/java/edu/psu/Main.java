@@ -1,8 +1,17 @@
 package edu.psu;
 
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+
 import static edu.psu.SQLiteDB.*;
 import static edu.psu.PostgreSQL.*;
 import static edu.psu.Migration.*;
+import static edu.psu.generatePostgreSQL.tables.Departments.DEPARTMENTS;
 
 public class Main {
 
@@ -23,8 +32,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        loadUNF();
-        load3NF();
-        migrateDataTo3NF(urlUNF, url3NF, user3NF, password3NF);
+        //loadUNF();
+        //load3NF();
+        //migrateDataTo3NF(urlUNF, url3NF, user3NF, password3NF);
+        export3NFCSV(url3NF, user3NF, password3NF);
     }
 }

@@ -18,10 +18,12 @@ import static edu.psu.generatePostgreSQL.tables.Visits.VISITS;
 
 public class Migration {
 
-    public static void insertQualificationGategories(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
-    {
+    public static void insertQualificationCategories(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
+
         try (Connection conn = DriverManager.getConnection(urlSQLite)) {
+
             DSLContext context = DSL.using(conn);
+
             List<String> qualificationCategories =
                     context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.QUALIFICATION_CATEGORY_DOCTOR)
                             .from(PERM_CITY_POLYCLINIC_7_REGISTRY)
@@ -31,30 +33,29 @@ public class Migration {
             try (Connection pgConn = DriverManager.getConnection(urlPostgreSQL, userPostgreSQL, passwordPostgreSQL)) {
                 DSLContext pgContext = DSL.using(pgConn);
 
-                for (int i=0; i < qualificationCategories.size(); i++)
-                {
+                for (int i=0; i < qualificationCategories.size(); i++) {
                     pgContext.insertInto(QUALIFICATION_CATEGORIES,
                             QUALIFICATION_CATEGORIES.QUALIFICATION_CATEGORY)
                             .values(qualificationCategories.get(i))
                             .execute();
                 }
             }
-            catch (SQLException e)
-            {
+            catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.exit(0);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
         }
     }
 
-    public static void insertDepartments(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
-    {
+    public static void insertDepartments(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
+
         try (Connection conn = DriverManager.getConnection(urlSQLite)) {
+
             DSLContext context = DSL.using(conn);
+
             List<String> departments =
                     context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.DEPARTMENT)
                             .from(PERM_CITY_POLYCLINIC_7_REGISTRY)
@@ -64,30 +65,29 @@ public class Migration {
             try (Connection pgConn = DriverManager.getConnection(urlPostgreSQL, userPostgreSQL, passwordPostgreSQL)) {
                 DSLContext pgContext = DSL.using(pgConn);
 
-                for (int i=0; i < departments.size(); i++)
-                {
+                for (int i=0; i < departments.size(); i++) {
                     pgContext.insertInto(DEPARTMENTS,
                             DEPARTMENTS.DEPARTMENT)
                             .values(departments.get(i))
                             .execute();
                 }
             }
-            catch (SQLException e)
-            {
+            catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.exit(0);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
         }
     }
 
-    public static void insertSpecialDepartments(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
-    {
+    public static void insertSpecialDepartments(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
+
         try (Connection conn = DriverManager.getConnection(urlSQLite)) {
+
             DSLContext context = DSL.using(conn);
+
             Map<String, String> specialDepartments =
                     context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.DEPARTMENT, PERM_CITY_POLYCLINIC_7_REGISTRY.SPECIAL_DEPARTMENT)
                             .from(PERM_CITY_POLYCLINIC_7_REGISTRY)
@@ -97,8 +97,7 @@ public class Migration {
             try (Connection pgConn = DriverManager.getConnection(urlPostgreSQL, userPostgreSQL, passwordPostgreSQL)) {
                 DSLContext pgContext = DSL.using(pgConn);
 
-                for (Map.Entry<String,String> entry : specialDepartments.entrySet())
-                {
+                for (Map.Entry<String,String> entry : specialDepartments.entrySet()) {
                     Integer id = pgContext.select(DEPARTMENTS.ID)
                             .from(DEPARTMENTS)
                             .where(DEPARTMENTS.DEPARTMENT.eq(entry.getValue()))
@@ -111,23 +110,22 @@ public class Migration {
                             .execute();
                 }
             }
-            catch (SQLException e)
-            {
+            catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.exit(0);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
         }
     }
 
-    public static void insertDoctors(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
-    {
+    public static void insertDoctors(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
+
         try (Connection conn = DriverManager.getConnection(urlSQLite)) {
 
             DSLContext context = DSL.using(conn);
+
             Result<Record9<Integer,String,String,String,String,String,String,String,String>> doctors =
                     context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.ID_DOCTOR,
                             PERM_CITY_POLYCLINIC_7_REGISTRY.NAME_DOCTOR,
@@ -143,9 +141,7 @@ public class Migration {
 
             try (Connection pgConn = DriverManager.getConnection(urlPostgreSQL, userPostgreSQL, passwordPostgreSQL)) {
                 DSLContext pgContext = DSL.using(pgConn);
-
-                for (int i=0; i < doctors.size(); i++)
-                {
+                for (int i=0; i < doctors.size(); i++) {
                     String[] name = doctors.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.NAME_DOCTOR).get(i).split("\\s+");
 
                     Integer idQualificationCategory = pgContext.select(QUALIFICATION_CATEGORIES.ID)
@@ -180,22 +176,22 @@ public class Migration {
                             .execute();
                 }
             }
-            catch (SQLException e)
-            {
+            catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.exit(0);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
         }
     }
 
-    public static void insertPatients(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
-    {
+    public static void insertPatients(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
+
         try (Connection conn = DriverManager.getConnection(urlSQLite)) {
+
             DSLContext context = DSL.using(conn);
+
             Result<Record4<Integer,String,String,String>> patients =
                     context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.CARD_NUMBER,
                             PERM_CITY_POLYCLINIC_7_REGISTRY.NAME_PATIENT,
@@ -207,8 +203,7 @@ public class Migration {
             try (Connection pgConn = DriverManager.getConnection(urlPostgreSQL, userPostgreSQL, passwordPostgreSQL)) {
                 DSLContext pgContext = DSL.using(pgConn);
 
-                for (int i=0; i < patients.size(); i++)
-                {
+                for (int i=0; i < patients.size(); i++) {
                     String[] name = patients.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.NAME_PATIENT).get(i).split("\\s+");
 
                     pgContext.insertInto(PATIENTS)
@@ -219,23 +214,22 @@ public class Migration {
                             .execute();
                 }
             }
-            catch (SQLException e)
-            {
+            catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.exit(0);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
         }
     }
 
-    public static void insertVisits(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
-    {
+    public static void insertVisits(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
+
         try (Connection conn = DriverManager.getConnection(urlSQLite)) {
 
             DSLContext context = DSL.using(conn);
+
             Result<Record5<String,Integer,Integer,Integer,String>> visits =
                     context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_DATETIME,
                             PERM_CITY_POLYCLINIC_7_REGISTRY.ID_DOCTOR,
@@ -248,8 +242,7 @@ public class Migration {
             try (Connection pgConn = DriverManager.getConnection(urlPostgreSQL, userPostgreSQL, passwordPostgreSQL)) {
                 DSLContext pgContext = DSL.using(pgConn);
 
-                for (int i=0; i < visits.size(); i++)
-                {
+                for (int i=0; i < visits.size(); i++) {
                     pgContext.insertInto(VISITS)
                             .values(visits.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_DATETIME).get(i),
                                     visits.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.ID_DOCTOR).get(i),
@@ -259,12 +252,10 @@ public class Migration {
                             .execute();
                 }
             }
-            catch (SQLException e)
-            {
+            catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.exit(0);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
@@ -272,7 +263,7 @@ public class Migration {
     }
     
     public static void migrateDataTo3NF(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
-        insertQualificationGategories(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
+        insertQualificationCategories(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
         insertDepartments(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
         insertSpecialDepartments(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
         insertDoctors(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);

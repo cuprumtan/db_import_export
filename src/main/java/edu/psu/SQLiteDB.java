@@ -21,7 +21,9 @@ public class SQLiteDB {
 
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
+
             if (conn != null) {
+
                 DatabaseMetaData meta = conn.getMetaData();
                 System.out.println("The driver name is " + meta.getDriverName());
                 System.out.println("A new SQLite database has been created");
@@ -38,7 +40,6 @@ public class SQLiteDB {
                     System.out.println("File not found");
                 }
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
@@ -46,10 +47,12 @@ public class SQLiteDB {
     }
 
     public static List<List<String>> loadCSV(String path) {
+
         String line = "";
         String cvsSplitBy = ",";
 
         List<List<String>> arrayList = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             while ((line = br.readLine()) != null) {
                 // use comma as separator
@@ -70,18 +73,14 @@ public class SQLiteDB {
 
         String[] dates = {"2020-09-05 09:00:00", "2020-09-05 10:00:00", "2020-09-05 11:00:00", "2020-09-05 12:00:00", "2020-09-05 14:00:00", "2020-09-05 16:00:00", "2020-09-05 17:00:00",
                           "2020-09-06 09:00:00", "2020-09-06 10:00:00", "2020-09-06 11:00:00", "2020-09-06 12:00:00", "2020-09-06 14:00:00", "2020-09-06 16:00:00", "2020-09-06 17:00:00",};
-
         List<Integer> patientsNumbers;
-
         List<List<String>> registry = new ArrayList<>();
         Random random = new Random();
         int randomPatient;
 
-        for (int i=0; i < doctors.size(); i++)
-        {
+        for (int i=0; i < doctors.size(); i++) {
             patientsNumbers = IntStream.range(1, patients.size()).boxed().collect(Collectors.toList());
-            for (int j=0; j < dates.length && j < patientsNumbers.size(); j++)
-            {
+            for (int j=0; j < dates.length && j < patientsNumbers.size(); j++) {
                 List<String> row = new ArrayList<>();
                 row.addAll(doctors.get(i));
                 randomPatient = patientsNumbers.get(random.nextInt(patientsNumbers.size()));
@@ -104,8 +103,9 @@ public class SQLiteDB {
         try (Connection conn = DriverManager.getConnection(url)) {
 
             DSLContext context = DSL.using(conn);
-            for (int i=0; i < data.size(); i++)
-            {
+
+            for (int i=0; i < data.size(); i++) {
+
                 context.insertInto(PermCityPolyclinic_7Registry.PERM_CITY_POLYCLINIC_7_REGISTRY)
                         .values(data.get(i).get(0), data.get(i).get(1), data.get(i).get(2), data.get(i).get(3),
                                 data.get(i).get(4), data.get(i).get(5), data.get(i).get(6), data.get(i).get(7),
@@ -113,7 +113,6 @@ public class SQLiteDB {
                                 data.get(i).get(12), data.get(i).get(13), data.get(i).get(14), data.get(i).get(15))
                         .execute();
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.exit(0);
