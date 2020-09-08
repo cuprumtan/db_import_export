@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS perm_city_polyclinic_7_registry;
 CREATE TABLE IF NOT EXISTS perm_city_polyclinic_7_registry (
+     ID_doctor INTEGER NOT NULL,
      name_doctor VARCHAR(50) NOT NULL,
      birth_date_doctor TEXT NOT NULL,
      sex_doctor CHAR(1) NOT NULL,

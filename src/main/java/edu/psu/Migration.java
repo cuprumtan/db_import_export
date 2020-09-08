@@ -1,13 +1,10 @@
 package edu.psu;
 
-import edu.psu.generateSQLite.tables.PermCityPolyclinic_7Registry;
 import org.jooq.*;
 import org.jooq.impl.DSL;
-import org.jooq.meta.derby.sys.Sys;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -129,9 +126,11 @@ public class Migration {
     public static void insertDoctors(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
     {
         try (Connection conn = DriverManager.getConnection(urlSQLite)) {
+
             DSLContext context = DSL.using(conn);
-            Result<Record8<String,String,String,String,String,String,String,String>> doctors =
-                    context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.NAME_DOCTOR,
+            Result<Record9<Integer,String,String,String,String,String,String,String,String>> doctors =
+                    context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.ID_DOCTOR,
+                            PERM_CITY_POLYCLINIC_7_REGISTRY.NAME_DOCTOR,
                             PERM_CITY_POLYCLINIC_7_REGISTRY.BIRTH_DATE_DOCTOR,
                             PERM_CITY_POLYCLINIC_7_REGISTRY.SEX_DOCTOR,
                             PERM_CITY_POLYCLINIC_7_REGISTRY.EDUCATION_DOCTOR,
@@ -170,11 +169,9 @@ public class Migration {
                             .fetch()
                             .getValues(SPECIAL_DEPARTMENTS.ID, Integer.class).get(0);
 
-                    pgContext.insertInto(DOCTORS,
-                            DOCTORS.LAST_NAME, DOCTORS.FIRST_NAME, DOCTORS.PATRONYMIC,
-                            DOCTORS.BIRTH_DATE, DOCTORS.SEX, DOCTORS.EDUCATION, DOCTORS.POSITION,
-                            DOCTORS.ID_QUALIFICATION_CATEGORY, DOCTORS.ID_SPECIAL_DEPARTMENT)
-                            .values(name[0], name[1], name[2],
+                    pgContext.insertInto(DOCTORS)
+                            .values(doctors.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.ID_DOCTOR).get(i),
+                                    name[0], name[1], name[2],
                                     LocalDate.parse(doctors.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.BIRTH_DATE_DOCTOR).get(i)),
                                     doctors.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.SEX_DOCTOR).get(i),
                                     doctors.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.EDUCATION_DOCTOR).get(i),
@@ -214,9 +211,7 @@ public class Migration {
                 {
                     String[] name = patients.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.NAME_PATIENT).get(i).split("\\s+");
 
-                    pgContext.insertInto(PATIENTS,
-                            PATIENTS.CARD_NUMBER, PATIENTS.LAST_NAME, PATIENTS.FIRST_NAME,
-                            PATIENTS.PATRONYMIC, PATIENTS.BIRTH_DATE, PATIENTS.SEX)
+                    pgContext.insertInto(PATIENTS)
                             .values(patients.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.CARD_NUMBER).get(i),
                                     name[0], name[1], name[2],
                                     LocalDate.parse(patients.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.BIRTH_DATE_PATIENT).get(i)),
@@ -234,6 +229,55 @@ public class Migration {
             System.out.println(e.getMessage());
             System.exit(0);
         }
+    }
+
+    public static void insertVisits(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL)
+    {
+        try (Connection conn = DriverManager.getConnection(urlSQLite)) {
+
+            DSLContext context = DSL.using(conn);
+            Result<Record5<String,Integer,Integer,Integer,String>> visits =
+                    context.selectDistinct(PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_DATETIME,
+                            PERM_CITY_POLYCLINIC_7_REGISTRY.ID_DOCTOR,
+                            PERM_CITY_POLYCLINIC_7_REGISTRY.CARD_NUMBER,
+                            PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_STATUS,
+                            PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_COMMENT)
+                            .from(PERM_CITY_POLYCLINIC_7_REGISTRY)
+                            .fetch();
+
+            try (Connection pgConn = DriverManager.getConnection(urlPostgreSQL, userPostgreSQL, passwordPostgreSQL)) {
+                DSLContext pgContext = DSL.using(pgConn);
+
+                for (int i=0; i < visits.size(); i++)
+                {
+                    pgContext.insertInto(VISITS)
+                            .values(visits.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_DATETIME).get(i),
+                                    visits.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.ID_DOCTOR).get(i),
+                                    visits.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.CARD_NUMBER).get(i),
+                                    visits.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_STATUS).get(i),
+                                    visits.getValues(PERM_CITY_POLYCLINIC_7_REGISTRY.VISIT_COMMENT).get(i))
+                            .execute();
+                }
+            }
+            catch (SQLException e)
+            {
+                System.out.println(e.getMessage());
+                System.exit(0);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+    }
+    
+    public static void migrateDataTo3NF(String urlSQLite, String urlPostgreSQL, String userPostgreSQL, String passwordPostgreSQL) {
+        insertQualificationGategories(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
+        insertDepartments(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
+        insertSpecialDepartments(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
+        insertDoctors(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
+        insertPatients(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
+        insertVisits(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
     }
 
 }

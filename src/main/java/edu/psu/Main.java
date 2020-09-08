@@ -23,13 +23,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        //loadUNF();
-        //load3NF();
-        //insertQualificationGategories(urlUNF, url3NF, user3NF, password3NF);
-        //insertDepartments(urlUNF, url3NF, user3NF, password3NF);
-        //insertSpecialDepartments(urlUNF, url3NF, user3NF, password3NF);
-        //insertDoctors(urlUNF, url3NF, user3NF, password3NF);
-        //insertPatients(urlUNF, url3NF, user3NF, password3NF);
-
+        loadUNF();
+        load3NF();
+        migrateDataTo3NF(urlUNF, url3NF, user3NF, password3NF);
     }
 }

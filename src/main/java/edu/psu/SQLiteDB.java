@@ -110,7 +110,7 @@ public class SQLiteDB {
                         .values(data.get(i).get(0), data.get(i).get(1), data.get(i).get(2), data.get(i).get(3),
                                 data.get(i).get(4), data.get(i).get(5), data.get(i).get(6), data.get(i).get(7),
                                 data.get(i).get(8), data.get(i).get(9), data.get(i).get(10), data.get(i).get(11),
-                                data.get(i).get(12), data.get(i).get(13), data.get(i).get(14))
+                                data.get(i).get(12), data.get(i).get(13), data.get(i).get(14), data.get(i).get(15))
                         .execute();
             }
 
