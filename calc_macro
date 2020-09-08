@@ -1,0 +1,40 @@
+sub csv_import
+
+    departments =  "file:/home/cuprumtan/Documents/departments.csv"
+    doctors =  "file:////home/cuprumtan/Documents/doctors.csv"
+    patients =  "file:////home/cuprumtan/Documents/patients.csv"
+    qualification_categories =  "file:////home/cuprumtan/Documents/qualification_categories.csv"
+    special_departments =  "file:////home/cuprumtan/Documents/special_departments.csv"
+    visits =  "file:////home/cuprumtan/Documents/visits.csv"
+    
+    dim fileProps(1) as new com.sun.star.beans.PropertyValue
+    fileProps(0).Name = "FilterName"
+    fileProps(0).Value = "Text - txt - csv (StarCalc)"
+    fileProps(1).Name = "FilterOptions"
+    fileProps(1).Value = "44,34,76,1,,1049,false,true,true,false"
+       
+    if len(departments)>0 then
+        document = StarDesktop.loadComponentFromURL(departments, "_blank", 0, fileProps())
+    end if
+    
+    if len(doctors)>0 then
+        document = StarDesktop.loadComponentFromURL(doctors, "_blank", 0, fileProps())
+    end if
+    
+    if len(patients)>0 then
+        document = StarDesktop.loadComponentFromURL(patients, "_blank", 0, fileProps())
+    end if
+    
+    if len(qualification_categories)>0 then
+        document = StarDesktop.loadComponentFromURL(qualification_categories, "_blank", 0, fileProps())
+    end if
+    
+    if len(special_departments)>0 then
+        document = StarDesktop.loadComponentFromURL(special_departments, "_blank", 0, fileProps())
+    end if
+    
+    if len(visits)>0 then
+        document = StarDesktop.loadComponentFromURL(visits, "_blank", 0, fileProps())
+    end if
+
+end sub
