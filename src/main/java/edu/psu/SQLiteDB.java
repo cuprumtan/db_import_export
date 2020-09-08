@@ -25,19 +25,21 @@ public class SQLiteDB {
             if (conn != null) {
 
                 DatabaseMetaData meta = conn.getMetaData();
+                System.out.println("Connecting to SQLite...");
                 System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new SQLite database has been created");
+                System.out.println("A new database has been created");
 
                 String line = "";
                 String sql = "";
 
-                try (BufferedReader br = new BufferedReader(new FileReader("structureSQLite.sql"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader("scripts/structureSQLite.sql"))) {
                     while ((line = br.readLine()) != null) {
                         sql += line;
                     }
                     stmt.executeUpdate(sql);
+                    System.out.println("UNF data loaded");
                 } catch (IOException e) {
-                    System.out.println("File not found");
+                    System.out.println("ERROR: File not found");
                 }
             }
         } catch (SQLException e) {
@@ -60,7 +62,7 @@ public class SQLiteDB {
                 arrayList.add(Arrays.asList(values));
             }
         } catch (IOException e) {
-            System.out.println("File not found");
+            System.out.println("ERROR: File not found");
         }
 
         return arrayList;

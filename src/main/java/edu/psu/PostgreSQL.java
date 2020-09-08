@@ -22,16 +22,21 @@ public class PostgreSQL {
         String sql = "";
         String line = "";
 
-        try (BufferedReader br = new BufferedReader(new FileReader("structurePostgreSQL.sql"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("scripts/structurePostgreSQL.sql"))) {
             while ((line = br.readLine()) != null) {
                 sql += line;
             }
         } catch (IOException e) {
-            System.out.println("File not found");
+            System.out.println("ERROR: File not found");
         }
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              Statement stmt = conn.createStatement()) {
+
+            DatabaseMetaData meta = conn.getMetaData();
+            System.out.println("\nConnecting to PostgreSQL...");
+            System.out.println("The driver name is " + meta.getDriverName());
+            System.out.println("3NF table structures created");
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -57,7 +62,7 @@ public class PostgreSQL {
             fileWriter.close();
 
         } catch (IOException e) {
-            System.out.println("File IO error:");
+            System.out.println("ERROR: File IO error:");
             e.printStackTrace();
         }
     }
@@ -87,7 +92,7 @@ public class PostgreSQL {
             fileWriter.close();
 
         } catch (IOException e) {
-            System.out.println("File IO error:");
+            System.out.println("ERROR: File IO error:");
             e.printStackTrace();
         }
     }
@@ -113,7 +118,7 @@ public class PostgreSQL {
             fileWriter.close();
 
         } catch (IOException e) {
-            System.out.println("File IO error:");
+            System.out.println("ERROR: File IO error:");
             e.printStackTrace();
         }
     }
@@ -135,7 +140,7 @@ public class PostgreSQL {
             fileWriter.close();
 
         } catch (IOException e) {
-            System.out.println("File IO error:");
+            System.out.println("ERROR: File IO error:");
             e.printStackTrace();
         }
     }
@@ -158,7 +163,7 @@ public class PostgreSQL {
             fileWriter.close();
 
         } catch (IOException e) {
-            System.out.println("File IO error:");
+            System.out.println("ERROR: File IO error:");
             e.printStackTrace();
         }
     }
@@ -184,7 +189,7 @@ public class PostgreSQL {
             fileWriter.close();
 
         } catch (IOException e) {
-            System.out.println("File IO error:");
+            System.out.println("ERROR: File IO error:");
             e.printStackTrace();
         }
     }
@@ -214,6 +219,8 @@ public class PostgreSQL {
 
             List<Visits> visits = context.selectFrom(VISITS).fetchInto(Visits.class);
             writeVisitsToCSV(path, visits, "visits.csv");
+
+            System.out.println("3NF data exported and is ready for LibreOffice Calc macro");
 
         }
         catch (SQLException e) {

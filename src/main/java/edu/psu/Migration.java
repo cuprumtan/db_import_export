@@ -269,6 +269,8 @@ public class Migration {
         insertDoctors(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
         insertPatients(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
         insertVisits(urlSQLite, urlPostgreSQL, userPostgreSQL, passwordPostgreSQL);
+
+        System.out.println("3NF data loaded");
     }
 
 }
